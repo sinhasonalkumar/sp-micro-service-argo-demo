@@ -31,27 +31,27 @@ jobs:
           else
             BUILD_TAG=1.$(echo $BUILD_TAG | awk -F "." '{ printf $1+1 }').0
           fi
-          echo $BUILD_TAG
+          echo "BUILD_TAG=$BUILD_TAG"
           echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_OUTPUT
 
       - name: create-tag
         run: |
           BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
-          echo $BUILD_TAG
+          echo "BUILD_TAG=$BUILD_TAG"
           git tag $BUILD_TAG
           git checkout $BUILD_TAG
-      - name: build-and-test
-        run: ./mvnw clean package
-      - name: container-build-tag-and-push
-        run: |
-          BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
-          echo $BUILD_TAG
-          docker build -t sp-micro-service-argo-demo:$BUILD_TAG .
-          docker tag sp-micro-service-argo-demo:$BUILD_TAG sinhasonalkumar/sp-micro-service-argo-demo:$BUILD_TAG
-          docker push sinhasonalkumar/sp-micro-service-argo-demo
-      - name: Push Tag
-        run: |
-          BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
-          echo $BUILD_TAG
-          git push origin $BUILD_TAG
+      # - name: build-and-test
+      #   run: ./mvnw clean package
+      # - name: container-build-tag-and-push
+      #   run: |
+      #     BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
+      #     echo $BUILD_TAG
+      #     docker build -t sp-micro-service-argo-demo:$BUILD_TAG .
+      #     docker tag sp-micro-service-argo-demo:$BUILD_TAG sinhasonalkumar/sp-micro-service-argo-demo:$BUILD_TAG
+      #     docker push sinhasonalkumar/sp-micro-service-argo-demo
+      # - name: Push Tag
+      #   run: |
+      #     BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
+      #     echo $BUILD_TAG
+      #     git push origin $BUILD_TAG
 
