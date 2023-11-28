@@ -37,6 +37,7 @@ jobs:
       - name: create-tag
         run: |
           BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
+          echo $BUILD_TAG
           git tag $BUILD_TAG
           git checkout $BUILD_TAG
       - name: build-and-test
@@ -44,11 +45,13 @@ jobs:
       - name: container-build-tag-and-push
         run: |
           BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
+          echo $BUILD_TAG
           docker build -t sp-micro-service-argo-demo:$BUILD_TAG .
           docker tag sp-micro-service-argo-demo:$BUILD_TAG sinhasonalkumar/sp-micro-service-argo-demo:$BUILD_TAG
           docker push sinhasonalkumar/sp-micro-service-argo-demo
       - name: Push Tag
         run: |
           BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
+          echo $BUILD_TAG
           git push origin $BUILD_TAG
 
