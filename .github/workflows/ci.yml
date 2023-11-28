@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   build:
-    name: CI
+    name: ci
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
@@ -22,18 +22,33 @@ jobs:
           VAR1: "Value of var1."
         env:
           ENV1: "Value Of environment variable env1."
-      - name: Create Tag
+      - name : calculate-build-tag
+        run : |
+          export LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          if [[ -z "$LATEST_TAG" ]]
+          then
+            BUILD_TAG=1.0.0
+          else
+            BUILD_TAG=1.$(echo $BUILD_TAG | awk -F "." '{ printf $1+1 }').0
+          fi
+          echo $BUILD_TAG
+          echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_OUTPUT
+
+      - name: create-tag
         run: |
-          git tag 0.0.1
-          git checkout 0.0.1
-      - name: BuildAndTest
+          BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}"
+          git tag $BUILD_TAG
+          git checkout $BUILD_TAG
+      - name: build-and-test
         run: ./mvnw clean package
-      - name: Container Build Tag And Push
+      - name: container-build-tag-and-push
         run: |
-          docker build -t sp-micro-service-argo-demo .
-          docker tag sp-micro-service-argo-demo sinhasonalkumar/sp-micro-service-argo-demo
+          BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}"
+          docker build -t sp-micro-service-argo-demo:$BUILD_TAG .
+          docker tag sp-micro-service-argo-demo:$BUILD_TAG sinhasonalkumar/sp-micro-service-argo-demo:$BUILD_TAG
           docker push sinhasonalkumar/sp-micro-service-argo-demo
       - name: Push Tag
         run: |
-          git push origin 0.0.1
+          BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}"
+          git push origin $BUILD_TAG
 
