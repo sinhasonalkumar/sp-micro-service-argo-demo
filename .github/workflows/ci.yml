@@ -32,14 +32,14 @@ jobs:
             BUILD_TAG=1.$(echo $BUILD_TAG | awk -F "." '{ printf $1+1 }').0
           fi
           echo "BUILD_TAG=$BUILD_TAG"
-          echo "TAG=$BUILD_TAG" >> $GITHUB_OUTPUT
+          echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_ENV
 
       - name: create-tag
         run: |
-          TAG=${{ steps.calculate-build-tag.outputs.TAG }}
-          echo "TAG=$TAG"
-          git tag $TAG
-          git checkout $TAG
+          BUILD_TAG=${{ env.BUILD_TAG }}
+          echo "BUILD_TAG=$BUILD_TAG"
+          git tag $BUILD_TAG
+          git checkout $BUILD_TAG
       # - name: build-and-test
       #   run: ./mvnw clean package
       # - name: container-build-tag-and-push
