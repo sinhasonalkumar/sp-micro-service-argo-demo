@@ -24,8 +24,7 @@ jobs:
           ENV1: "Value Of environment variable env1."
       - name : calculate-build-tag
         run : |
-          export LATEST_TAG
-          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          export LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
           if [[ -z "$LATEST_TAG" ]]
           then
             BUILD_TAG=1.0.0
