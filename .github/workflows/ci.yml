@@ -22,7 +22,7 @@ jobs:
           VAR1: "Value of var1."
         env:
           ENV1: "Value Of environment variable env1."
-     - name: Create Tag
+      - name: Create Tag
         run: |
           git tag 0.0.1
           git checkout 0.0.1
