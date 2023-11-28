@@ -22,6 +22,10 @@ jobs:
           VAR1: "Value of var1."
         env:
           ENV1: "Value Of environment variable env1."
+     - name: Create Tag
+        run: |
+          git tag 0.0.1
+          git checkout 0.0.1
       - name: BuildAndTest
         run: ./mvnw clean package
       - name: Container Build Tag And Push
@@ -29,5 +33,7 @@ jobs:
           docker build -t sp-micro-service-argo-demo .
           docker tag sp-micro-service-argo-demo sinhasonalkumar/sp-micro-service-argo-demo
           docker push sinhasonalkumar/sp-micro-service-argo-demo
-
+      - name: Push Tag
+        run: |
+          git push origin 0.0.1
 
