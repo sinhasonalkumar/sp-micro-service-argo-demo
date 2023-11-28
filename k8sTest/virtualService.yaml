@@ -1,0 +1,38 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: sp-micro-service-argo-demo
+  namespace: dev
+spec:
+  hosts:
+  - "api.mycompany.com"
+  gateways:
+  - istio-system/sp-micro-service-argo-demo-ig
+  #- mesh
+  http:
+  - match:
+    - uri:
+        prefix: /ds
+    corsPolicy:
+      allowOrigins:
+      - regex: 'http://*.company.com'
+      allowMethods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      allowCredentials: false
+      allowHeaders:
+      - Authorization
+      - Content-Type
+      maxAge: "24h" 
+    route:
+    - destination:
+        host: sp-micro-service-argo-demo.dev.svc.cluster.local
+        port:
+          number: 8080                      
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: connect-failure,refused-stream,503

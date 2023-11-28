@@ -4,7 +4,7 @@ metadata:
   labels:
     app: sp-micro-service-argo-demo
   name: sp-micro-service-argo-demo
-  namespace: playground
+  namespace: dev
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -22,6 +22,16 @@ spec:
       labels:
         app: sp-micro-service-argo-demo
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - sp-micro-service-argo-demo
+            topologyKey: "kubernetes.io/hostname"
       initContainers:
       - name: install
         image: busybox:1.35.0
@@ -42,9 +52,9 @@ spec:
           value: "dev"
         resources:
           requests:
-            memory: 130Mi
+            memory: 512Mi
           limits:
-            memory: 520Mi
+            memory: 512Mi
         volumeMounts:
         - name: workdir
           mountPath: "/app-configs"
