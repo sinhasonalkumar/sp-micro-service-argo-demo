@@ -24,12 +24,12 @@ jobs:
           ENV1: "Value Of environment variable env1."
       - name : calculate-build-tag
         run : |
-          export LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
           if [[ -z "$LATEST_TAG" ]]
           then
-            export BUILD_TAG=1.0.0
+            BUILD_TAG=1.0.0
           else
-            export BUILD_TAG=1.$(echo $BUILD_TAG | awk -F "." '{ printf $1+1 }').0
+            BUILD_TAG=1.$(echo $BUILD_TAG | awk -F "." '{ printf $1+1 }').0
           fi
           echo "BUILD_TAG=$BUILD_TAG"
           echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_OUTPUT
