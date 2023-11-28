@@ -1,11 +1,11 @@
-name: CI
+name: PRSanity
 on:
   pull_request:
     branches:
       - main
 jobs:
   build:
-    name: prSanityBuild
+    name: ValidatePR
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
