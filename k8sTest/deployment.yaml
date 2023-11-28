@@ -43,6 +43,8 @@ spec:
       - image: sinhasonalkumar/sp-micro-service-argo-demo:1.0.0
         imagePullPolicy: Always
         name: sp-micro-service-argo-demo
+        ports:
+        - containerPort: 8080
         env:
         - name: JAVA_TOOL_OPTIONS
           value: "-Xms128m -Xmx512m"
@@ -55,6 +57,24 @@ spec:
             memory: 512Mi
           limits:
             memory: 512Mi
+        readinessProbe:
+            httpGet:
+              path: /ds/actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 2
+            failureThreshold: 4
+        livenessProbe:
+          httpGet:
+            path: /ds/actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 4
         volumeMounts:
         - name: workdir
           mountPath: "/app-configs"
