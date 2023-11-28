@@ -36,7 +36,7 @@ jobs:
 
       - name: create-tag
         run: |
-          BUILD_TAG=${{ steps.calculate-build-tag.outputs.BUILD_TAG }}
+          BUILD_TAG="${{ steps.calculate-build-tag.outputs.BUILD_TAG }}"
           echo "BUILD_TAG=$BUILD_TAG"
           git tag $BUILD_TAG
           git checkout $BUILD_TAG
