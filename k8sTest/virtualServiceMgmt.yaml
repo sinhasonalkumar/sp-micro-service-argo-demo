@@ -1,18 +1,20 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: sp-micro-service-argo-demo
+  name: sp-micro-service-argo-demo-mgmt
   namespace: dev
 spec:
   hosts:
-  - "api.mycompany.com"
+  - "mgmt-api.mycompany.com"
   gateways:
   - istio-system/sp-micro-service-argo-demo-ig
   #- mesh
   http:
   - match:
     - uri:
-        prefix: /ds/v1
+        prefix: /ds/actuator
+    - uri:
+        prefix: /ds/api-docs/v1
     corsPolicy:
       allowOrigins:
       - regex: 'http://*.company.com'
