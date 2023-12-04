@@ -23,7 +23,7 @@ public class CanaryController {
 	@Value("${microservice.spms.canary.name}")
 	private String canaryName;
 	
-	@Operation(summary = "This web method check canary version for AB Testing")
+	@Operation(summary = "This web method check canary version for AB Testing.")
     @GetMapping
     public ResponseEntity<Map<String,String>> getCanaryDetails() {
         Map<String, String> canaryAttributes = new HashMap<String, String>();
