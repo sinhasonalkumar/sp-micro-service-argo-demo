@@ -28,7 +28,7 @@ public class CanaryController {
     public ResponseEntity<Map<String,String>> getCanaryDetails() {
         Map<String, String> canaryAttributes = new HashMap<String, String>();
         canaryAttributes.put("environment", environment);
-        canaryAttributes.put("canaryName", canaryName);
+        canaryAttributes.put("canaryname", canaryName);
 		return ResponseEntity.ok(canaryAttributes);
     }
 }
